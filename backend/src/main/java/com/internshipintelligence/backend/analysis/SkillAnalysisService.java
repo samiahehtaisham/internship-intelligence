@@ -1,4 +1,3 @@
-
 package com.internshipintelligence.backend.analysis;
 
 import java.util.ArrayList;
@@ -152,5 +151,46 @@ public class SkillAnalysisService {
                 (double) matchedCount / requiredCount * 100
         ));
     }
+
+    
+    public Map<String, String> extractSkillEvidence(String text) {
+        Map<String, String> evidence = new LinkedHashMap<>();
+
+        if (text == null || text.isBlank()) {
+            return evidence;
+        }
+
+        String normalized = text.toLowerCase(Locale.ROOT);
+
+        for (Map.Entry<String, List<String>> entry
+                : skillAliases.entrySet()) {
+            for (String term : entry.getValue()) {
+                String regex =
+                        "(?<![a-z0-9+#])"
+                        + Pattern.quote(term.toLowerCase(Locale.ROOT))
+                        + "(?![a-z0-9+#])";
+
+                var matcher = Pattern.compile(regex).matcher(normalized);
+
+                if (matcher.find()) {
+                    int start = matcher.start();
+                    int end = matcher.end();
+
+                    int contextStart = Math.max(0, start - 60);
+                    int contextEnd = Math.min(text.length(), end + 60);
+
+                    String excerpt = text.substring(contextStart, contextEnd)
+                            .replaceAll("\\s+", " ")
+                            .trim();
+
+                    evidence.put(entry.getKey(), excerpt);
+                    break;
+                }
+            }
+        }
+
+        return evidence;
+    }
+
 }
 

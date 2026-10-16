@@ -54,4 +54,34 @@ class SkillAnalysisServiceTest {
     void calculatesCoveragePercentage() {
         assertEquals(56, service.calculateCoverage(5, 9));
     }
+
+    
+    @Test
+    void doesNotMatchSkillsInsideLongerWords() {
+        assertEquals(
+                List.of(),
+                service.extractSkills(
+                        "The candidate enjoys adjusting projects and learning new subjects."
+                )
+        );
+    }
+
+    @Test
+void doesNotDetectJavaScriptFromUnrelatedWords() {
+    assertEquals(
+            List.of(),
+            service.extractSkills(
+                    "The candidate enjoys projects and has strong business skills."
+            )
+    );
+}
+
+@Test
+void detectsJavaScriptWhenJsAppearsAsAStandaloneWord() {
+    assertEquals(
+            List.of("JavaScript"),
+            service.extractSkills("Experience with JS is preferred.")
+    );
+}
+
 }

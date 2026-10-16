@@ -53,6 +53,7 @@ function App() {
   const [analyses, setAnalyses] = useState<Analysis[]>([]);
   const [activeAnalysis, setActiveAnalysis] = useState<Analysis | null>(null);
   const [error, setError] = useState("");
+  const [skillEvidence, setSkillEvidence] = useState<Record<string, string>>({});
 
   const [backendStatus, setBackendStatus] = useState("Checking...");
 
@@ -145,10 +146,14 @@ try {
     throw new Error("Failed to analyze job description.");
   }
 
-  const data: { detectedSkills: string[]; totalSkills: number } =
-    await response.json();
+  const data: {
+  detectedSkills: string[];
+  totalSkills: number;
+  skillEvidence: Record<string, string>;
+} = await response.json();
 
-  required = data.detectedSkills;
+required = data.detectedSkills;
+setSkillEvidence(data.skillEvidence ?? {});
 } catch {
   setError("Could not analyze the job description. Please check that the backend is running and try again.");
   return;
@@ -492,11 +497,47 @@ try {
                 <div className="panel result-details">
                   <div className="result-section">
                     <div className="result-heading"><span className="result-check">✓</span><h2>Skills in your profile</h2><span className="result-count">{activeAnalysis.matched.length}</span></div>
-                    {activeAnalysis.matched.length ? <div className="result-chips">{activeAnalysis.matched.map((skill) => <span className="result-chip matched" key={skill}>{skill}</span>)}</div> : <p className="muted">No matched skills detected yet.</p>}
+                    
+{activeAnalysis.matched.length ? (
+  <div className="result-chips">
+    {activeAnalysis.matched.map((skill) => (
+      <div key={skill}>
+        <span className="result-chip matched">{skill}</span>
+        {skillEvidence?.[skill] && (
+          <p className="muted">
+            Evidence: “{skillEvidence?.[skill]}”
+          </p>
+        )}
+      </div>
+    ))}
+  </div>
+) : (
+  <p className="muted">No matched skills detected yet.</p>
+)}
+
                   </div>
                   <div className="result-section">
                     <div className="result-heading"><span className="result-cross">↗</span><h2>Skills to develop</h2><span className="result-count">{activeAnalysis.missing.length}</span></div>
-                    {activeAnalysis.missing.length ? <div className="result-chips">{activeAnalysis.missing.map((skill) => <span className="result-chip missing" key={skill}>{skill}</span>)}</div> : <p className="muted">No gaps in the supported skill dictionary were detected.</p>}
+                    
+{activeAnalysis.missing.length ? (
+  <div className="result-chips">
+    {activeAnalysis.missing.map((skill) => (
+      <div key={skill}>
+        <span className="result-chip missing">{skill}</span>
+        {skillEvidence?.[skill] && (
+  <p className="muted">
+    Evidence: “{skillEvidence[skill]}”
+  </p>
+)}
+      </div>
+    ))}
+  </div>
+) : (
+  <p className="muted">
+    No gaps in the supported skill dictionary were detected.
+  </p>
+)}
+
                   </div>
                 </div>
               </div>

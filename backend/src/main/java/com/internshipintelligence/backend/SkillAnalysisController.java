@@ -30,8 +30,9 @@ public class SkillAnalysisController {
                 skillAnalysisService.extractSkills(jobDescription);
 
         return Map.of(
-                "detectedSkills", detectedSkills,
-                "totalSkills", detectedSkills.size()
+        "detectedSkills", detectedSkills,
+        "totalSkills", detectedSkills.size(),
+        "skillEvidence", skillAnalysisService.extractSkillEvidence(jobDescription)
         );
     }
 }
