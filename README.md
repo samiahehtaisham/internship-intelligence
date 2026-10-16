@@ -1,75 +1,125 @@
-# React + TypeScript + Vite
+# Internship Intelligence
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A full-stack web application that helps software engineering students analyze internship job descriptions, identify required skills, and track gaps against their existing skill set.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **Job Description Analysis** — Extract and analyze skills mentioned in internship descriptions.
+- **Skill Gap Identification** — Compare required skills against a student's current skills.
+- **Skills Dashboard** — Review existing skills and identify areas for improvement.
+- **Saved Analyses** — Save and retrieve previous job analyses.
+- **Persistent Storage** — Store saved analyses in PostgreSQL.
+- **Automated Tests** — Test skill-analysis logic and backend API behavior.
 
-## React Compiler
+## Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+**Frontend**
+- React
+- TypeScript
+- Vite
+- CSS
 
-## Expanding the ESLint configuration
+**Backend**
+- Java
+- Spring Boot
+- Spring Data JPA
+- Maven
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+**Database**
+- PostgreSQL
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+**Testing & Tools**
+- JUnit
+- MockMvc
+- ESLint
+- Git and GitHub
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Architecture
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+The application uses a React and TypeScript frontend that communicates with a Spring Boot REST API. The backend processes skill-analysis requests and uses PostgreSQL to persist saved analyses.
 
+```text
+React + TypeScript Frontend
+          |
+          | HTTP / REST API
+          v
+Spring Boot Backend
+          |
+          | Spring Data JPA
+          v
+      PostgreSQL
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+## Getting Started
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Prerequisites
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- Node.js and npm
+- Java 25
+- PostgreSQL
+- Git
 
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/samiahehtaisham/internship-intelligence.git
+cd internship-intelligence
 ```
+
+### 2. Configure PostgreSQL
+
+Create a PostgreSQL database named `internship_intelligence`.
+
+Configure your database credentials using environment variables:
+
+- `DB_USERNAME` — PostgreSQL username (defaults to `postgres`)
+- `DB_PASSWORD` — PostgreSQL password
+
+Do not commit real passwords or other secrets to GitHub.
+
+### 3. Start the backend
+
+Open a terminal in the `backend` directory and run:
+
+```bash
+.\mvnw.cmd spring-boot:run
+```
+
+The backend runs on `http://localhost:8080` by default.
+
+### 4. Start the frontend
+
+Open another terminal in the project root and run:
+
+```bash
+npm install
+npm run dev
+```
+
+Open the local URL printed by Vite in your terminal.
+
+## Running Tests
+
+### Frontend tests
+
+```bash
+npm run test:run
+```
+
+### Backend tests
+
+From the `backend` directory:
+
+```bash
+.\mvnw.cmd test
+```
+
+## Project Status
+
+This project is being developed as a portfolio project to demonstrate full-stack software engineering, REST API development, database persistence, and automated testing.
+
+## Author
+
+**Samiah Ehtaisham**
+
+- GitHub: [@samiahehtaisham](https://github.com/samiahehtaisham)
